@@ -7,6 +7,15 @@ using System.Web;
 
 namespace aspcrud1.Models
 {
+    public class mTabla
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Direccion { get; set; }
+        public string Telefono { get; set; }
+        public int Estatus { get; set; }
+
+    }
     public class mPersonas
     {
         SqlClass miSqlClass = new SqlClass();

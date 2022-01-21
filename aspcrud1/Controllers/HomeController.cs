@@ -4,24 +4,48 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using aspcrud1.Models;
 
 namespace aspcrud1.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        string ganon = "https://localhost:44352/api/principal/";
+        public ActionResult Index() 
         {
             return View();
         }
         
         public JsonResult TablaPersonas(int Filtro)
         {
-            mPersonas Persona = new mPersonas();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ganon + "table");
 
-            var x = Persona.obtenerPersonas(Filtro);
-            return Json(x);
+                var data = new
+                {
+                    Tabla = Filtro
+                };
+
+                var content = new StringContent(JsonConvert.SerializeObject(data));
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var request = client.PostAsync(client.BaseAddress, content);
+                request.Wait();
+
+                var respuesta = request.Result.Content.ReadAsStringAsync().Result;
+                var dsRespuesta = JObject.Parse(respuesta)["Mensaje"];
+
+                var persona = dsRespuesta["json"].Value<string>();
+                var extractResp = JsonConvert.DeserializeObject<List<mTabla>>(persona);
+
+                return Json(extractResp);
+            }
+            
         }
 
         public JsonResult TablaPersonasbusqueda(string Busqueda)
