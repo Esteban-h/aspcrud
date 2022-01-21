@@ -1,6 +1,4 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
+﻿@{ ViewBag.Title = "Home Page"; }
 
 <div class="container">
     <!-- <div class="row"> -->
@@ -11,6 +9,7 @@
     </div>
     <div class="row" style="margin-bottom: 20px">
         <button class="btn btn-primary col-xs-4" id="btn_new">NUEVA PERSONA</button>
+
         <div class="col-xs-4 form-group">
             <select name="" id="select_status" class="form-control">
                 <option value="2">TODOS</option>
@@ -18,10 +17,13 @@
                 <option value="0">INACTIVOS</option>
             </select>
         </div>
+
         <div class="col-xs-4 form-group">
             <input type="text" class="form-control" id="txt_busqueda" placeholder="busqueda...">
         </div>
+
     </div>
+
     <div id="tableContainer" class="table-responsive row">
 
         <table class="table table-striped table-bordered">
@@ -41,4 +43,113 @@
 
     </div>
     <!-- </div> -->
+    <!-- Modal -->
+
+    <div class="modal fade bs-example-modal-lg" id="ModalAgregarPersonas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog modal-lg" style="max-width: 85%">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <button arial-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">
+                            x
+                        </span>
+                    </button>
+
+                    <h1 id="lblAddPersonas"></h1>
+                </div>
+
+                <div class="modal-body">
+
+
+                    <div class="row">
+
+                        <div class="col-md-12 col-lg-12">
+
+                            <div class="row">
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="inputColor ">
+                                            Nombre:
+                                        </label>
+                                        <input class="form-control vfper" validar="1" id="inputNombre" placeholder="" type="text" />
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="inputCapacidad ">
+                                            Apellido Paterno:
+                                        </label>
+                                        <input class="form-control vfper" validar="1" id="inputApellidoP" placeholder="" type="text" />
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="inputPlacas ">
+                                            Apellido Materno:
+                                        </label>
+                                        <input class="form-control vfper" validar="1" id="inputApellidoM" placeholder="" type="text" />
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="inputMarca ">
+                                            Direccion:
+                                        </label>
+                                        <input class="form-control vfper" validar="1" id="inputDireccion" placeholder="" type="text" />
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="inputMarca ">
+                                            Telefono:
+                                        </label>
+                                        <input class="form-control vfper" validar="1" id="inputTelefono" placeholder="" type="text" />
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+                    <button id="btncerrarPersonas" type="button" class="btn btn-danger">
+                        <i class="fa fa-times">
+                        </i>
+                        Cerrar
+                    </button>
+
+                    <button onclick="guardarPersonas()" id="btnGuardarPersonas" type="button" class="btn btn-success">
+                        <i class="fa fa-times">
+                        </i>
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
