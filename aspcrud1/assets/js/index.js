@@ -123,31 +123,27 @@ function detalles(id) {
 
 function guardarPersonas() {
 
-	validarFormulario('.vfper', function (json) {
+	let info = {};
+	info.Nombre = $('#nombre').val();
+	info.ApellidoP = $('#ap_paterno').val();
+	info.ApellidoM = $('#ap_materno').val();
+	info.Direccion = $('#direccion').val();
+	info.Telefono = $('#telefono').val();
 
-		if (json.bool) {
+	procede = validarFormulario(info);
 
-			let info = {};
+	if (procede) {
+		if (edit) {
+			info.Id = id;
+			guardarEdicion(info);
+		} else {
+			guardar(info);
+        }
 
-			info.Nombre = $("#inputNombre").val();
-			info.ApellidoP = $("#inputApellidoP").val();
-			info.ApellidoM = $("#inputApellidoM").val();
-			info.Direccion = $("#inputDireccion").val();
-			info.Telefono = $("#inputTelefono").val();
-
-			if (state.editar == true) {
-				info.Id = state.auxId;
-
-				sendPersonaEdit(info);
-			}
-			else {
-				sendPersona(info);
-			}
-		}
-		else {
-			MsgAlerta("Atencion!", "Llenar campos faltantes", 3000, "Warning");
-		}
-	});
+	} else {
+		MsgAlerta("Atención!", "Faltan campos por llenar!", 3000, "danger");
+	}
+}	
 
 }
 function sendPersona(info) {
@@ -155,34 +151,31 @@ function sendPersona(info) {
 	$.ajax({
 		type: "POST",
 		contentType: "application/x-www-form-urlencoded",
-		url: SITE_URL + "/Home/Guardar",
+		url: SITE_URL + "/Home/CrearClientes",
 		data: info,
-		dataType: "JSON",
+		dataType: 'JSON',
 		beforeSend: function () {
 			LoadingOn("Espere...");
 		},
 		success: function (data) {
 			if (data) {
-
 				LoadingOff();
-				LimpiarPersonasForm();
 
-				MsgAlerta("Realizado!", "Registro guardado", 3000, "success");
-				$('#ModalAgregarPersonas').modal('hide');
-
+				MsgAlerta("Listo!", "Persona guardada", 3000, "success");
 				loadData();
-
-			} else {
-				ErrorLog("Error", " Error controlado");
+				limpiarInput();
+				$('#ModalAgregarPersonas').modal('hide');
+			} else {			
 				LoadingOff();
+				MsgAlerta("Oops", "Ha ocurrido un error", 3000, "danger");
 			}
 		},
 		error: function (error) {
-			ErrorLog(error.responseText, "Error de comunicación, verifica tu conexión y vuelve a intentarlo.");
-			LoadingOff();
-
+			MsgAlerta("Error", error, 3000, "danger");
+			console.log("No")
 		}
 	});
+}
 
 
 }

@@ -56,12 +56,35 @@ namespace aspcrud1.Controllers
             return Json(x);
         }
 
-        public JsonResult Guardar(mPersonas newPersona)
+        public JsonResult GuardarPersona(mPersonas newPersona)
         {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ganon + "create");
 
-            mPersonas Persona = new mPersonas();
-            var x = Persona.insertPersona(newPersona);
-            return Json(x);
+                var data = new
+                {
+                    Nombres = newPersona.Nombre,
+                    ApellidoP = newPersona.ApellidoP,
+                    ApellidoM = newPersona.ApellidoM,
+                    Direccion = newPersona.Direccion,
+                    Telefono = newPersona.Telefono,
+                };
+
+                var content = new StringContent(JsonConvert.SerializeObject(data));
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var request = client.PostAsync(client.BaseAddress, content);
+                request.Wait();
+
+                var respuesta = request.Result.Content.ReadAsStringAsync().Result;
+                var dsRespuesta = JObject.Parse(respuesta)["Err"];
+
+                bool extractResp = true;
+
+                return Json(extractResp);
+            }
+            
         }
 
         public JsonResult DetallesPersona(int Id)
