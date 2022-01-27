@@ -50,10 +50,40 @@ namespace aspcrud1.Controllers
 
         public JsonResult TablaPersonasbusqueda(string Busqueda)
         {
-            mPersonas Persona = new mPersonas();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ganon + "search");
 
-            var x = Persona.obtenerPersonasBusqueda(Busqueda);
-            return Json(x);
+                var data = new
+                {
+                    busqueda = Busqueda,
+                };
+
+                var content = new StringContent(JsonConvert.SerializeObject(data));
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var request = client.PostAsync(client.BaseAddress, content);
+                request.Wait();
+
+                var respuesta = request.Result.Content.ReadAsStringAsync().Result;
+                var dsRespuesta = JObject.Parse(respuesta)["Mensaje"];
+
+                var persona = dsRespuesta["json"].Value<string>();
+
+                if (persona == null)
+                {
+                    return Json("");
+                }
+
+                else
+                {
+                    var extractResp = JsonConvert.DeserializeObject<List<mTabla>>(persona);
+
+                    return Json(extractResp);
+                }
+
+                
+            }
         }
 
         public JsonResult GuardarPersona(mPersonas newPersona)
@@ -88,35 +118,103 @@ namespace aspcrud1.Controllers
         }
 
         public JsonResult DetallesPersona(int Id)
-        {   
+        {
             mPersonas Persona = new mPersonas();
 
             var x = Persona.obtenerPersonaDetalles(Id);
             return Json(x);
+        
         }
 
-        public JsonResult Editar(mPersonas newPersona)
+        public JsonResult Editar(mPersonas newPersona, int id)
         {
 
-            mPersonas Persona = new mPersonas();
-            var x = Persona.EditarPersona(newPersona);
-            return Json(x);
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ganon + "update");
+
+                var data = new
+                {
+                    Id = id,
+                    Nombres = newPersona.Nombre,
+                    ApellidoP = newPersona.ApellidoP,
+                    ApellidoM = newPersona.ApellidoM,
+                    Direccion = newPersona.Direccion,
+                    Telefono = newPersona.Telefono,
+                };
+
+                var content = new StringContent(JsonConvert.SerializeObject(data));
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var request = client.PostAsync(client.BaseAddress, content);
+                request.Wait();
+
+                var respuesta = request.Result.Content.ReadAsStringAsync().Result;
+                var dsRespuesta = JObject.Parse(respuesta)["Mensaje"];
+
+                var validacion = dsRespuesta["Err"].Value<string>();
+
+                bool extractResp = true;
+
+                if (validacion != "1")
+                {
+                    extractResp = false;
+                }
+
+                return Json(extractResp);
+            }
         }
 
         public JsonResult Eliminar(int Id)
         {
-            mPersonas Persona = new mPersonas();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ganon + "deactivate");
 
-            var x = Persona.EliminarPersona(Id);
-            return Json(x);
+                var data = new
+                {
+                    Id = Id,
+                };
+
+                var content = new StringContent(JsonConvert.SerializeObject(data));
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var request = client.PostAsync(client.BaseAddress, content);
+                request.Wait();
+
+                var respuesta = request.Result.Content.ReadAsStringAsync().Result;
+                var dsRespuesta = JObject.Parse(respuesta)["Err"];
+
+                bool extractResp = true;
+
+                return Json(extractResp);
+            }
         }
 
         public JsonResult Reactivar(int Id)
         {
-            mPersonas Persona = new mPersonas();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ganon + "deactivate");
 
-            var x = Persona.ReactivarPersona(Id);
-            return Json(x);
+                var data = new
+                {
+                    Id = Id,
+                };
+
+                var content = new StringContent(JsonConvert.SerializeObject(data));
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var request = client.PostAsync(client.BaseAddress, content);
+                request.Wait();
+
+                var respuesta = request.Result.Content.ReadAsStringAsync().Result;
+                var dsRespuesta = JObject.Parse(respuesta)["Err"];
+
+                bool extractResp = true;
+
+                return Json(extractResp);
+            }
         }
 
         public JsonResult CrearClientes(mPersonas newPersona)

@@ -16,30 +16,30 @@ var error = "Ocurrió un error insesperado en el sitio, por favor intentelo mas 
 var success = "La accion se ralizó con exito";
 var datosIncorrectos = "Datos incorrectos, vuelve a intentarlo.";
 
-function loadData(){
+function loadData() {
 
 	var filtro = $('#select_status').val();
 
 	$.ajax({
-		url: SITE_URL +'/Home/TablaPersonas',
-		type:'POST',
-		data: { Filtro: filtro},
-		dataType:'JSON',
+		url: SITE_URL + '/Home/TablaPersonas',
+		type: 'POST',
+		data: { Filtro: filtro },
+		dataType: 'JSON',
 		beforeSend: function () {
 
 			LoadingOn("Espere...");
 			$("#tbody").empty();
 		},
-		error: function(error){
+		error: function (error) {
 			//console.log(error);
 			MsgAlerta("Error!", error, 3000, "error");
 			LoadingOff();
 		},
-		success: function(data){
+		success: function (data) {
 			//console.log(data);
 			LoadingOff();
 
-			if(data != ""){
+			if (data != "") {
 
 				var TablaPersonas = "";
 
@@ -65,13 +65,13 @@ function loadData(){
 						<button class="btn btn-success" onclick="reactivar(`+ data[i].Id + `)" title="Reactivar" type="">
 							<i class="fa fa-check" aria-hidden="true"></i>
 						</button></tr>`;
-                    }
+					}
 
 				}
 
 				$('#tbody').html(TablaPersonas);
 			}
-			else{
+			else {
 				MsgAlerta("Atencion!", "No hay personas para mostrar", 5000, "warning");
 			}
 		}
@@ -115,7 +115,7 @@ function detalles(id) {
 			}
 			else {
 				MsgAlerta("Atencion!", "No hay personas por mostrar", 5000, "Warning");
-			}		
+			}
 		}
 	});
 
@@ -123,27 +123,31 @@ function detalles(id) {
 
 function guardarPersonas() {
 
-	let info = {};
-	info.Nombre = $('#nombre').val();
-	info.ApellidoP = $('#ap_paterno').val();
-	info.ApellidoM = $('#ap_materno').val();
-	info.Direccion = $('#direccion').val();
-	info.Telefono = $('#telefono').val();
+	validarFormulario('.vfper', function (json) {
 
-	procede = validarFormulario(info);
+		if (json.bool) {
 
-	if (procede) {
-		if (edit) {
-			info.Id = id;
-			guardarEdicion(info);
-		} else {
-			guardar(info);
-        }
+			let info = {};
 
-	} else {
-		MsgAlerta("Atención!", "Faltan campos por llenar!", 3000, "danger");
-	}
-}	
+			info.Nombre = $("#inputNombre").val();
+			info.ApellidoP = $("#inputApellidoP").val();
+			info.ApellidoM = $("#inputApellidoM").val();
+			info.Direccion = $("#inputDireccion").val();
+			info.Telefono = $("#inputTelefono").val();
+
+			if (state.editar == true) {
+				info.Id = state.auxId;
+
+				sendPersonaEdit(info);
+			}
+			else {
+				sendPersona(info);
+			}
+		}
+		else {
+			MsgAlerta("Atencion!", "Llenar campos faltantes", 3000, "Warning");
+		}
+	});
 
 }
 function sendPersona(info) {
@@ -151,36 +155,39 @@ function sendPersona(info) {
 	$.ajax({
 		type: "POST",
 		contentType: "application/x-www-form-urlencoded",
-		url: SITE_URL + "/Home/CrearClientes",
+		url: SITE_URL + "/Home/GuardarPersona",
 		data: info,
-		dataType: 'JSON',
+		dataType: "JSON",
 		beforeSend: function () {
 			LoadingOn("Espere...");
 		},
 		success: function (data) {
 			if (data) {
-				LoadingOff();
 
-				MsgAlerta("Listo!", "Persona guardada", 3000, "success");
-				loadData();
-				limpiarInput();
-				$('#ModalAgregarPersonas').modal('hide');
-			} else {			
 				LoadingOff();
-				MsgAlerta("Oops", "Ha ocurrido un error", 3000, "danger");
+				LimpiarPersonasForm();
+
+				MsgAlerta("Realizado!", "Registro guardado", 3000, "success");
+				$('#ModalAgregarPersonas').modal('hide');
+
+				loadData();
+
+			} else {
+				//ErrorLog("Error", " Error controlado");
+				LoadingOff();
 			}
 		},
 		error: function (error) {
-			MsgAlerta("Error", error, 3000, "danger");
-			console.log("No")
+			//ErrorLog(error.responseText, "Error de comunicación, verifica tu conexión y vuelve a intentarlo.");
+			LoadingOff();
+
 		}
 	});
-}
 
 
 }
 
-function sendPersonaEdit(info){
+function sendPersonaEdit(info) {
 
 	$.ajax({
 		type: "POST",
@@ -215,7 +222,7 @@ function sendPersonaEdit(info){
 	});
 }
 
-function eliminar(id){
+function eliminar(id) {
 
 	$.ajax({
 		type: "POST",
@@ -289,7 +296,7 @@ function editar(id) {
 
 }
 
-$(document).on('change', '#select_status', function(e){
+$(document).on('change', '#select_status', function (e) {
 	loadData();
 });
 
@@ -298,22 +305,22 @@ $(document).on('keyup', '#txt_busqueda', function (e) {
 
 	$.ajax({
 		url: SITE_URL + '/Home/TablaPersonasbusqueda',
-		type:'POST',
+		type: 'POST',
 		async: false,
-		data: { Busqueda: $(this).val()},
-		dataType:'JSON',
+		data: { Busqueda: $(this).val() },
+		dataType: 'JSON',
 		beforeSend: function () {
 
 			LoadingOn("Espere...");
 			$("#tbody").empty();
 
 		},
-		error: function(error){
+		error: function (error) {
 			//console.log(error);
 			MsgAlerta("Error!", error, 5000, "error");
 			LoadingOff();
 		},
-		success: function(data){
+		success: function (data) {
 			console.log(data);
 			LoadingOff();
 

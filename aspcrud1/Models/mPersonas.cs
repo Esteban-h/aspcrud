@@ -16,6 +16,16 @@ namespace aspcrud1.Models
         public int Estatus { get; set; }
 
     }
+
+    public class mDatos
+    {
+        public string Nombres { get; set; }
+        public string ApellidoP { get; set; }
+        public string ApellidoM { get; set; }
+        public string Direccion { get; set; }
+        public string Telefono { get; set; }
+
+    }
     public class mPersonas
     {
         SqlClass miSqlClass = new SqlClass();
