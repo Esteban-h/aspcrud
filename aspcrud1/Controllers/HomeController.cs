@@ -119,11 +119,30 @@ namespace aspcrud1.Controllers
 
         public JsonResult DetallesPersona(int Id)
         {
-            mPersonas Persona = new mPersonas();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ganon + "demo2");
 
-            var x = Persona.obtenerPersonaDetalles(Id);
-            return Json(x);
-        
+                var data = new
+                {
+                    IdJson = Id,
+                    DatJson = "Hola"
+                };
+
+                var content = new StringContent(JsonConvert.SerializeObject(data));
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var request = client.PostAsync(client.BaseAddress, content);
+                request.Wait();
+
+                var respuesta = request.Result.Content.ReadAsStringAsync().Result;
+                var dsRespuesta = JObject.Parse(respuesta)["Mensaje"];
+
+                var persona = dsRespuesta["json"].Value<string>();
+                var extractResp = JsonConvert.DeserializeObject<List<mDatos>>(persona);
+
+                return Json(extractResp);
+            }
         }
 
         public JsonResult Editar(mPersonas newPersona, int id)
