@@ -94,7 +94,7 @@ namespace aspcrud1.Controllers
 
                 var data = new
                 {
-                    Nombres = newPersona.Nombre,
+                    Nombres = newPersona.Nombres,
                     ApellidoP = newPersona.ApellidoP,
                     ApellidoM = newPersona.ApellidoM,
                     Direccion = newPersona.Direccion,
@@ -155,7 +155,7 @@ namespace aspcrud1.Controllers
                 var data = new
                 {
                     Id = id,
-                    Nombres = newPersona.Nombre,
+                    Nombres = newPersona.Nombres,
                     ApellidoP = newPersona.ApellidoP,
                     ApellidoM = newPersona.ApellidoM,
                     Direccion = newPersona.Direccion,

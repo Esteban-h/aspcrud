@@ -31,7 +31,7 @@ namespace aspcrud1.Models
         SqlClass miSqlClass = new SqlClass();
 
         public int Id { get; set; }
-        public string Nombre { get; set; }
+        public string Nombres { get; set; }
         public string ApellidoP { get; set; }
         public string ApellidoM { get; set; }
         public string Direccion { get; set; }
@@ -66,7 +66,7 @@ namespace aspcrud1.Models
                        select new mPersonas
                        {
                            Id = Convert.ToInt32(rw["Id"]),
-                           Nombre = Convert.ToString(rw["Nombre"]),
+                           Nombres = Convert.ToString(rw["Nombre"]),
                            Telefono = Convert.ToString(rw["Telefono"]),
                            Direccion = Convert.ToString(rw["Direccion"]),
                            Estatus = Convert.ToInt32(rw["Estatus"])
@@ -93,7 +93,7 @@ namespace aspcrud1.Models
                        select new mPersonas
                        {
                            Id = Convert.ToInt32(rw["Id"]),
-                           Nombre = Convert.ToString(rw["Nombre"]),
+                           Nombres = Convert.ToString(rw["Nombre"]),
                            Telefono = Convert.ToString(rw["Telefono"]),
                            Direccion = Convert.ToString(rw["Direccion"]),
                            Estatus = Convert.ToInt32(rw["Estatus"])
@@ -107,7 +107,7 @@ namespace aspcrud1.Models
 
             miSqlClass.conectar();
 
-            miSqlClass.SqlConsulta(" INSERT INTO Personas_Esteban (Nombres, ApellidoP, ApellidoM, Direccion, Telefono) VALUES('"+newPersona.Nombre+"','"+newPersona.ApellidoP+"'" +
+            miSqlClass.SqlConsulta(" INSERT INTO Personas_Esteban (Nombres, ApellidoP, ApellidoM, Direccion, Telefono) VALUES('"+newPersona.Nombres+"','"+newPersona.ApellidoP+"'" +
                 ",'"+newPersona.ApellidoM+"','"+newPersona.Direccion+"','"+newPersona.Telefono+"')");
             
             return true;
@@ -128,7 +128,7 @@ namespace aspcrud1.Models
                        select new mPersonas
                        {
                            Id = Convert.ToInt32(rw["Id"]),
-                           Nombre = Convert.ToString(rw["Nombres"]),
+                           Nombres = Convert.ToString(rw["Nombres"]),
                            ApellidoP = Convert.ToString(rw["ApellidoP"]),
                            ApellidoM = Convert.ToString(rw["ApellidoM"]),
                            Telefono = Convert.ToString(rw["Telefono"]),
@@ -142,7 +142,7 @@ namespace aspcrud1.Models
         {
             miSqlClass.conectar();
 
-            miSqlClass.SqlConsulta(" UPDATE Personas_Esteban SET Nombres = '"+ newPersona.Nombre +"', ApellidoP = '"+ newPersona.ApellidoP +"', ApellidoM = '" + newPersona.ApellidoM +"'," +
+            miSqlClass.SqlConsulta(" UPDATE Personas_Esteban SET Nombres = '"+ newPersona.Nombres +"', ApellidoP = '"+ newPersona.ApellidoP +"', ApellidoM = '" + newPersona.ApellidoM +"'," +
                 " Direccion = '"+ newPersona.Direccion +"', Telefono = '"+ newPersona.Telefono +"' WHERE Id = '"+ newPersona.Id +"' ");
 
             return true;

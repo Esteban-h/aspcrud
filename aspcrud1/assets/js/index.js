@@ -101,7 +101,7 @@ function detalles(id) {
 
 			if (data != "") {
 
-				$("#inputNombre").val(data[0].Nombre);
+				$("#inputNombre").val(data[0].Nombres);
 				$("#inputApellidoP").val(data[0].ApellidoP);
 				$("#inputApellidoM").val(data[0].ApellidoM);
 				$("#inputDireccion").val(data[0].Direccion);
